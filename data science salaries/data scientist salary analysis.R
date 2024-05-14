@@ -180,6 +180,7 @@ salary_summary<-salary_summary[order(-salary_summary$salary_in_usd),]#here we ar
 top_10<-head(salary_summary,10)#here we are assigning the first top 10 job titles with the highest salary mean the name top 10
 num_job_titles<-nrow(top_10) #this code is used to determine the number of colors to be generated based on the number of the job titles indicated
 colors<-rainbow(num_job_titles)
+par(mar = c(5, 10, 4, 2)) #adjusts the margins of the plot. The second value (10) increases the width of the plotting area to accommodate longer labels
 barplot(top_10$salary_in_usd,names.arg = top_10$job_title,
         main = "Mean Salary by Job Title",
         xlab="Mean Salary",
@@ -508,7 +509,7 @@ levels(dss$jobttcat)
 levels(dss$salary_in_usdcat)
 #test for association between salary category and job category
 fisher.test(table(dss$salary_in_usdcat,dss$jobttcat))
-#the p-value = 7.573e-05 which is less that 5%,means that we reject the null hypothesis,thus its statistically significant,the 95% CI also supports the null hypothesis because zero  does not lie in between the given ranges.In odds ratio explanation,we first recognize the reference categories for the both characteristic variables as done above in line 507 and 508,the the other category is rated to the reference category,in our case, With an odds ratio of  0.7806202,this means that there is a less likelihood ( 0.7806202) that individuals who have other jobs titles earn more than USD 138000 compared to data scientists.
+#the p-value = 7.573e-05 which is less that 5%,means that we reject the null hypothesis,thus its statistically significant,the 95% CI also supports the null hypothesis because zero  does not lie in between the given ranges.In odds ratio explanation,we first recognize the reference categories for the both characteristic variables as done above in line 508 and 509,the the other category is rated to the reference category,in our case, With an odds ratio of  0.7806202,this means that there is a less likelihood ( 0.7806202) that individuals who have other jobs titles earn more than USD 138000 compared to data scientists.
 
 #test for association between salary category and experience level
 levels(dss$experience_levelcat)
