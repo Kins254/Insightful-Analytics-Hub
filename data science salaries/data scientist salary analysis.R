@@ -180,7 +180,7 @@ salary_summary<-salary_summary[order(-salary_summary$salary_in_usd),]#here we ar
 top_10<-head(salary_summary,10)#here we are assigning the first top 10 job titles with the highest salary mean the name top 10
 num_job_titles<-nrow(top_10) #this code is used to determine the number of colors to be generated based on the number of the job titles indicated
 colors<-rainbow(num_job_titles)
-par(mar = c(5, 10, 4, 2)) #adjusts the margins of the plot. The second value (10) increases the width of the plotting area to accommodate longer labels
+par(mar=c(5,10,5,5))
 barplot(top_10$salary_in_usd,names.arg = top_10$job_title,
         main = "Mean Salary by Job Title",
         xlab="Mean Salary",
@@ -192,7 +192,7 @@ barplot(top_10$salary_in_usd,names.arg = top_10$job_title,
         cex.names = 0.7,#this reduces the size of the labels
 )
 
-
+dev.off()
 #data visualization of mean salary via job experience
 salary_summary<-aggregate(salary_in_usd~experience_level,data = dss,FUN=mean)#this code calculates the mean of each Experience level's salary 
 num_experience_level<-nrow(salary_summary)
@@ -275,7 +275,7 @@ merged_data <- merge(world_map, salary_by_country, by.x = "region", by.y = "empl
 merged_data <- merged_data %>%
   mutate(continent = countrycode(region, origin = "country.name", destination = "continent")) %>%
   filter(continent == "Africa")
-
+par(mar=c(2,2,2,2))
 # Plot for Africa
 ggplot() +
   geom_map(data = merged_data, map = merged_data,  # Use world_map for mapping
@@ -482,23 +482,28 @@ cq7
 wilcox.test(salary_in_usd~jobttcat,conf.int=T,conf.level=0.95,data=dss)
 #the p-value = 0.0001831 which is less that 5%,means that we reject the null hypothesis,thus its statistically significant,the 95% CI also supports the null hypothesis because zero  does not lie in between the given ranges
 
-#comparing the salary between the experience category
+#comparing the salary between the  experience type category
+wilcox.test(salary_in_usd~experience_levelcat,conf.int=T,conf.level=0.95,data=dss)
+#the p-value < 2.2e-16 which is less that 5%,means that we reject the null hypothesis,thus its statistically significant,the 95% CI also supports the null hypothesis because zero  does not lie in between the given ranges
+
+
+#comparing the salary between the company location category
 wilcox.test(salary_in_usd~company_locationcat,conf.int=T,conf.level=0.95,data=dss)
 #the p-value < 2.2e-16 which is less that 5%,means that we reject the null hypothesis,thus its statistically significant,the 95% CI also supports the null hypothesis because zero  does not lie in between the given ranges
 
-#comparing the salary between the experience category
+#comparing the salary between the employee's residence category
 wilcox.test(salary_in_usd~employee_residencecat,conf.int=T,conf.level=0.95,data=dss)
 #the p-value < 2.2e-16 which is less that 5%,means that we reject the null hypothesis,thus its statistically significant,the 95% CI also supports the null hypothesis because zero  does not lie in between the given ranges
 
-#comparing the salary between the experience category
+#comparing the salary between the work model category
 wilcox.test(salary_in_usd~work_modelscat,conf.int=T,conf.level=0.95,data=dss)
 #the p-value < 2.2e-16 which is less that 5%,means that we reject the null hypothesis,thus its statistically significant,the 95% CI also supports the null hypothesis because zero  does not lie in between the given ranges
 
-#comparing the salary between the experience category
+#comparing the salary between the work year  category
 wilcox.test(salary_in_usd~work_yearcat,conf.int=T,conf.level=0.95,data=dss)
 #the p-value < 2.2e-16 which is less that 5%,means that we reject the null hypothesis,thus its statistically significant,the 95% CI also supports the null hypothesis because zero  does not lie in between the given ranges
 
-#comparing the salary between the experience category
+#comparing the salary between the employment type category
 wilcox.test(salary_in_usd~employment_typecat,conf.int=T,conf.level=0.95,data=dss)
 #the p-value = 1.072e-13 which is less that 5%,means that we reject the null hypothesis,thus its statistically significant,the 95% CI also supports the null hypothesis because zero  does not lie in between the given ranges
 
@@ -509,7 +514,7 @@ levels(dss$jobttcat)
 levels(dss$salary_in_usdcat)
 #test for association between salary category and job category
 fisher.test(table(dss$salary_in_usdcat,dss$jobttcat))
-#the p-value = 7.573e-05 which is less that 5%,means that we reject the null hypothesis,thus its statistically significant,the 95% CI also supports the null hypothesis because zero  does not lie in between the given ranges.In odds ratio explanation,we first recognize the reference categories for the both characteristic variables as done above in line 508 and 509,the the other category is rated to the reference category,in our case, With an odds ratio of  0.7806202,this means that there is a less likelihood ( 0.7806202) that individuals who have other jobs titles earn more than USD 138000 compared to data scientists.
+#the p-value = 7.573e-05 which is less that 5%,means that we reject the null hypothesis,thus its statistically significant,the 95% CI also supports the null hypothesis because zero  does not lie in between the given ranges.In odds ratio explanation,we first recognize the reference categories for the both characteristic variables as done above in line 513 and 514,the the other category is rated to the reference category,in our case, With an odds ratio of  0.7806202,this means that there is a less likelihood ( 0.7806202) that individuals who have other jobs titles earn more than USD 138000 compared to data scientists.
 
 #test for association between salary category and experience level
 levels(dss$experience_levelcat)
@@ -538,7 +543,7 @@ fisher.test(table(dss$salary_in_usdcat,dss$work_modelscat))
 #The p-value = 9.848e-09 being less than 5% suggests that we reject the null hypothesis,meaning that the test is statistically significant,also the 95%CI supports our argument because zero  does not lie inside its ranges,the odds ratio 1.33419 ,suggests that employees with not flexible employment are statistically more likely to be earning a salary above USD 138000 compared to those who employment is flexible.
 
 
-#test for association between salary category and
+#test for association between salary category and work year
 levels(dss$work_yearcat)
 fisher.test(table(dss$salary_in_usdcat,dss$work_yearcat))
 #The p-value < 2.2e-16 being less than 5% suggests that we reject the null hypothesis,meaning that the test is statistically significant,also the 95%CI supports our argument because zero  does not lie inside its ranges,the odds ratio 1.734689,suggests that employees that were paid after 2022 are statistically more likely to be earning a salary above USD 138000 compared to those that were paid before 2022.
@@ -580,19 +585,19 @@ cor.test(dss$salary_in_usd,dss$work_yearcat2)
 #Correlation of salary to employee residence
 dss$employee_residencecat2<-as.numeric(dss$employee_residencecat)
 cor.test(dss$salary_in_usd,dss$employee_residencecat2)
-#the relationship between salary and work year is a weak positive correlation(r=0.1840217),which means that,employees who reside in the west part continents (encoded as 1) tends to be paid higher than those who reside in the east part continents (encoded as 0).The p-value < 2.2e-16,which is less than 5%(we reject the null hypothesis), gives us the confidence to say that the test is statistically significant,also looking at our 95% CI, zero does not lie in between its ranges.
+#the relationship between salary and employee's residence is a weak positive correlation(r=0.1840217),which means that,employees who reside in the west part continents (encoded as 1) tends to be paid higher than those who reside in the east part continents (encoded as 0).The p-value < 2.2e-16,which is less than 5%(we reject the null hypothesis), gives us the confidence to say that the test is statistically significant,also looking at our 95% CI, zero does not lie in between its ranges.
 
 
 #Correlation of salary to company location
 dss$company_locationcat2<-as.numeric(dss$company_locationcat)
 cor.test(dss$salary_in_usd,dss$company_locationcat2)
-#the relationship between salary and work year is a weak positive correlation(r=0.1645287),which means that,companies located in the west part continents (encoded as 1) tends to pay employees higher than those located in the east part continents (encoded as 0).The p-value < 2.2e-16,which is less than 5%(we reject the null hypothesis), gives us the confidence to say that the test is statistically significant,also looking at our 95% CI, zero does not lie in between its ranges.
+#the relationship between salary and company's location is a weak positive correlation(r=0.1645287),which means that,companies located in the west part continents (encoded as 1) tends to pay employees higher than those located in the east part continents (encoded as 0).The p-value < 2.2e-16,which is less than 5%(we reject the null hypothesis), gives us the confidence to say that the test is statistically significant,also looking at our 95% CI, zero does not lie in between its ranges.
 
 table(dss$company_sizecat)
 #Correlation of salary to company size
 dss$company_sizecat2<-as.numeric(dss$company_sizecat)
 cor.test(dss$salary_in_usd,dss$company_sizecat2)
-#The p-value < 2.2e-16,which is less than 5%(we reject the null hypothesis), gives us the confidence to say that the test is statistically significant,also looking at our 95% CI, zero does not lie in between its ranges.The relationship between salary and work year is a very weak positive linear  correlation(r=0.02768125),which means that,as company size increases,so do the salary paid to the employees,but the relationship is not strong enough to make meaningful predictions about salary based solely on company size.
+#The p-value < 2.2e-16,which is less than 5%(we reject the null hypothesis), gives us the confidence to say that the test is statistically significant,also looking at our 95% CI, zero does not lie in between its ranges.The relationship between salary and company's size is a very weak positive linear  correlation(r=0.02768125),which means that,as company size increases,so do the salary paid to the employees,but the relationship is not strong enough to make meaningful predictions about salary based solely on company size.
 
 #Machine learning
 #Linear regression
@@ -742,6 +747,8 @@ library(gbm)
 if(!require("caret"))install.packages("caret",dependencies = T)
 library(caret)
 
+if (!require("pROC")) install.packages("pROC", dependencies = TRUE)
+library(pROC)
 
 # Set up cross-validation
 ctrl <- trainControl(method = "cv", number = 5)
@@ -754,6 +761,7 @@ gbm_predictions <- predict(gbm_model, newdata = test_data)
 
 # Print the accuracy of the model
 gbm_accuracy <- mean(gbm_predictions == test_data$salary_in_usdcat)
+gbm_accuracy
 
 # Calculate confusion matrix
 conf_matrix <- confusionMatrix(data = gbm_predictions, reference = test_data$salary_in_usdcat)
@@ -762,8 +770,10 @@ conf_matrix <- confusionMatrix(data = gbm_predictions, reference = test_data$sal
 print(conf_matrix)
 
 #The top-left cell (525) indicates the number of observations that are actually in the class "Below USD 138000" and were predicted to be in the same class, (429) indicates the number of observations that are actually in the class "Above USD 138000" but were predicted to be in the "Below USD 138000" class.(177) indicates the number of observations that are actually in the class "Below USD 138000" but were predicted to be in the "Above USD 138000" class. (831) indicates the number of observations that are actually in the class "Above USD 138000" and were predicted to be in the same class
-#the accuracy(69.11%) is a little better than the other models,so we use this model for prediction,the p-value < 2.2e-16 which is less than 5% gives us the confidence to reject the null hypothesis,also the 95%CI supports our argument
+#the accuracy(69.11%) is a little better than the other models, so we use this model for prediction, the p-value < 2.2e-16 which is less than 5% gives us the confidence to reject the null hypothesis,also the 95%CI supports our argument
 # Cohen's Kappa statistic, which measures the agreement between the model's predictions and the actual classes, corrected for agreement by chance. In this case, it's approximately 0.3774, indicating moderate agreement
 
+
 #End of analysis 
+
 
